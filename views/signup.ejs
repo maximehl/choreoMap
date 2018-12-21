@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Sign Up for ChoreoMap</title>
+  <link rel="stylesheet" href="all.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="all.js"></script>
+</head>
+<body>
+  <h1>— Sign Up —</h1>
+  <h3>Thank you for deciding to join! Please enter:</h3>
+  <form action="/signup" method="POST" onsubmit="return checkSignup(this)">
+    <div>
+      <label>Username:</label>
+      <input type="text" name="username" placeholder="Username" autocomplete="off">
+    </div>
+    <div>
+      <label>Password:</label>
+      <input type="password" name="password" placeholder="Password">
+    </div>
+    <div>
+      <label>Confirm Password:</label>
+      <input type="password" name="passwordConfirm" placeholder="Password">
+    </div>
+    <button type="submit">Sign Up</button>
+  </form>
+  <br>
+  <a href="/login"><div class="clickable"><div class="vertAlignDiv"><b>Already have an account? Log In</b></div></div></a>
+  <a href="/"><div class="clickable"><div class="vertAlignDiv"><b>Back to Homepage</b></div></div></a>
+</body>
+
+</html>
