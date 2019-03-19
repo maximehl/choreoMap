@@ -1,0 +1,133 @@
+#canvas {
+  display: none;
+  background-color: pink;
+  width: 600px;
+  height: 450px;
+  /*position: absolute;*/
+  top: 0;
+  bottom: 0;
+  text-align: left;
+}
+
+#lEditSidebar{
+  width: 200px;
+  background-color: lightgrey;
+  padding: 10px;
+  border-radius: 15px;
+  float: left;
+  font-size: 11pt;
+}
+
+#rEditSidebar{
+  width: 200px;
+  background-color: lightgrey;
+  padding: 10px;
+  border-radius: 15px;
+  float: right;
+  font-size: 11pt;
+}
+
+ul{
+  text-align: left;
+}
+
+.divInsert{
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #e5e5e5;
+  margin: 10px 0;
+}
+
+button{
+  margin: 10px 0 0 0;
+}
+
+input{
+  margin: 5px 0;
+}
+
+h4, h5{
+  margin: 10px 0;
+}
+
+.listElement{
+  text-align: left;
+}
+.listElement:hover{
+  filter:brightness(0.8);
+}
+
+.listElement>div{
+  filter:none;
+}
+
+.colorSample{
+  width: 1em;
+  height: 1em;
+  border: 2px solid black;
+  display: inline-block;
+  vertical-align: bottom;
+}
+
+#groupErr{
+  display: none;
+}
+
+.circle{
+  border-radius: 50%;
+}
+
+.listElement > .editHover{
+  border: 0;
+  padding: 0;
+  display: inline-block;
+  vertical-align: bottom;
+  cursor: text;
+}
+
+.listElement > .editHover :hover{
+  border: 0.5px solid lightgrey;
+  background-color: white;
+  padding: 3px;
+}
+
+select{
+  width: 120px;
+}
+
+input[type='number']{
+  width: 40px;
+}
+
+.perfDot{
+  position: relative;
+  display: inline-block;
+  margin: 0;
+  width: 18px;
+  height: 18px;
+  border: 2px solid black;
+  /*tagHere change the dimensions?*/
+}
+.perfDot:hover{
+  cursor: pointer;
+  filter: brightness(0.8);
+}
+
+.dotSelected{
+  background-color: #FF0000 !important;
+}
+.dotSelected:hover{
+  cursor:grab;
+}
+.dotSelected:active{
+  cursor:grabbing;
+}
+
+.perfLabel{
+  position: relative;
+  text-align: center;
+  margin-left: -100%;
+  margin-right: -100%;
+  top: -18px;
+  font-size: 9pt;
+}

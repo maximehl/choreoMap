@@ -1,28 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Choreographies</title>
-  <link rel="stylesheet" href="all.css">
+  <title>ChoreoMap: Edit <%=choreoName%></title>
+  <link rel="stylesheet" href="../all.css">
+  <link rel="stylesheet" href="../editPage.css">
+  <link rel="icon" href="https://image.freepik.com/free-icon/musical-notes-symbols_318-29778.jpg">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="../editPage.js"></script>
   <style>
-    #choreoMenu{
-      width: 400px;
-      height: 600px;
-      background-color: lightgrey;
-      border-radius: 20px;
-      margin: auto;
-      padding: 20px;
-    }
   </style>
+  <script>
+    $(document).ready(function(){
+      $.get("/choreoData?id=<%=choreoID%>", function(data){
+        performers = data[0].performers;
+        groups = data[0].groups;
+        formations = data[0].formations;
+        fileLink = data[0].fileLink;
+        $("#testAudio").prop("src", "http://docs.google.com/uc?export=open&id=" + fileLink);
+
+        startUp();
+      })
+    })
+
+    function saveChoreo(){
+      var dataObj = {};
+      dataObj.choreoName = "<%=choreoID%>";
+      dataObj.fileLink = fileLink;
+      dataObj.performers = performers;
+      dataObj.groups = groups;
+      dataObj.formations = formations;
+
+      $.post("/edit?id=<%=choreoID%>", dataObj, function(data){
+        console.log("yaaaaah")
+      })
+    }
+  </script>
 </head>
 <body>
-  <h1>— Edit Choreographies! —</h1>
-  <h3>Username: <span id="username"><%=username%></span></h3>
-  <a href="/index"><div class="clickable"><div class="vertAlignDiv"><b>View Choreographies</b></div></div></a>
-  <a href="/login"><div class="clickable"><div class="vertAlignDiv"><b>Edit Choreographies</b></div></div></a>
-  <div id="choreoMenu">
-    <h3>Nothing to see here (yet)</h3>
+  <h1>— Edit: <%=choreoName%> —</h1>
+  <a href="/edit"><div class="clickable"><div class="vertAlignDiv"><b>Back to the Edit Index</b></div></div></a><br>
+  <a class="plainlink" href='/edit/delete/?id=<%=choreoID%>' onclick="return confirm('Are you sure you want to delete this choreography? This action cannot be undone.')">Delete this choreography</a>
+  <div id="loader">
+    <img src="https://i.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.webp">
+    <p>Loading...</p>
   </div>
-  <a href="/"><div class="clickable"><div class="vertAlignDiv"><b>Log Out and return to Homepage</b></div></div></a>
+  <br>
+
+  <div id="editInterface">
+    <div id="lEditSidebar">
+      <h4>Performers</h4>
+      <div id="performerList">
+      </div>
+
+      <div class="divInsert">
+        <h5>Make a new performer</h5>
+        <div>
+          <label>Performer name:</label>
+          <input type="text" id="formPerfName" placeholder="Name"><!-- autocomplete="off"-->
+        </div>
+        <div>
+          <label>Group:</label>
+          <select id="groupDropDown"></select>
+        </div>
+        <div id="perfErr" class="errorDiv"></div>
+        <button onclick="makeNewPerformer()">New performer</button>
+      </div>
+
+      <h4>Groups</h4>
+      <div id="groupList">
+      </div>
+
+      <div class="divInsert">
+        <h5>Make a new group</h5>
+        <div>
+          <label>Group name:</label>
+          <input type="text" id="formGroupName" placeholder="Group name"><!-- autocomplete="off"-->
+        </div>
+        <div>
+          <label>Group color:</label>
+          <input type="color" value="#4682e2" id="groupColor">
+        </div>
+        <div id="groupErr" class="errorDiv"></div>
+        <button onclick="makeNewGroup()">New group</button>
+      </div>
+    </div>
+
+    <div id="canvas">
+    </div>
+    
+    <div id="rEditSidebar">
+      <h4>Formations</h4>
+      <div id="formList">
+      </div>
+
+      <div class="divInsert">
+        <h5>Make a new formation</h5>
+        <div>
+          <label>Formation name:</label>
+          <input type="text" id="formFormName" placeholder="Name"><!-- autocomplete="off"-->
+        </div>
+        <div>
+          <label>Timecode:</label>
+          <input type="text" id="formTimecode" placeholder="- - : - - . - (min : sec)">
+        </div>
+        <div>
+          <label>Move length:</label>
+          <input type="number" step="0.1" id="formMoveLength" min="0" placeholder="(sec)">
+        </div>
+        <div id="formationErr" class="errorDiv"></div>
+        <button onclick="makeNewFormation()">New formation</button>
+      </div>
+    </div>
+  </div>
+  <audio id="testAudio" controls  src="" hidden></audio>
 </body>
 
 </html>

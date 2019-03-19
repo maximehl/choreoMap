@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Welcome to ChoreoMap</title>
+  <title>ChoreoMap: Welcome</title>
   <link rel="stylesheet" href="all.css">
+  <link rel="icon" href="https://image.freepik.com/free-icon/musical-notes-symbols_318-29778.jpg">
 </head>
 <body>
-  <h1>— Welcome! —</h1>
-  <h3>Log In or Sign Up?</h3>
-  <a href="/index"><div class="clickable"><div class="vertAlignDiv"><b>View Choreographies</b></div></div></a>
-  <a href="/login"><div class="clickable"><div class="vertAlignDiv"><b>Edit Choreographies</b></div></div></a>
+  <h1>— Welcome<%if(username){%>, <%=username%><%}%>! —</h1>
+  <h3>View or Edit Choreographies?</h3>
+  <a href="/view"><div class="clickable"><div class="vertAlignDiv"><b>View Choreographies</b></div></div></a>
+  <a href="/edit"><div class="clickable"><div class="vertAlignDiv"><b>Edit Choreographies</b></div></div></a>
+  <% if(username){%>
+    <a href="/logout"><div class="clickable"><div class="vertAlignDiv"><b>Log Out</b></div></div></a>
+  <%} %>
 </body>
 
 </html>

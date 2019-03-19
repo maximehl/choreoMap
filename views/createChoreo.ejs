@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>ChoreoMap: Create New Choreo</title>
+  <link rel="stylesheet" href="../all.css">
+  <link rel="icon" href="https://image.freepik.com/free-icon/musical-notes-symbols_318-29778.jpg">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <style>
+    audio{
+      margin-top: 10px;
+      vertical-align: -22px;
+    }
+    ol{
+      margin: 5px 0;
+    }
+    #help{
+      height:16px;
+      text-align: left;
+      width: 277px;
+      overflow: hidden;
+      margin: 10px auto;
+      background-color: #cee1ff;
+      border-radius: 10px;
+      padding: 10px;
+      cursor: pointer;
+    }
+  </style>
+  <script>
+    function updateAudio(input){
+      var songID = $(input).val();
+      $("#testAudio").prop("src", "http://docs.google.com/uc?export=open&id=" + songID);
+    }
+    $(document).ready(function(){
+      $("#help").on("click", function(){
+        if($("#help").css("height")==="16px"){
+          $("#help").animate({"height": "244px", "width": "400px"});
+        }else{
+          $("#help").animate({"height": "16px", "width": "277px"});
+        }
+      })
+    })
+
+    function checkCreate(form){
+      if(!form.choreoName.value){
+        window.alert("Please enter a title for your choreo.");
+        return false;
+      }else if(!form.fileLink.value){
+        window.alert("Please enter a song file link.");
+        return false;
+      }
+      var titleFree = false;
+      $.ajax({
+        url : '/checkChoreo?choreoName=' + form.choreoName.value,
+        type : 'GET',
+        async: false,
+        success : function(data, status) {
+          if(data.length===0){
+            titleFree = true;
+          }
+        },
+        error: function() {
+           alert("Server returned an error");
+           return false;
+        }
+      });
+      if(!titleFree){
+        window.alert("This title is already taken.")
+        return false;
+      }
+      if(confirm("Are you sure your song link works?")){
+        return titleFree;
+      }else{
+        return false;
+      }
+    }
+
+  </script>
+</head>
+<body>
+  <h1>— Create a New Choreography —</h1>
+  <h3>Please name your choreography.</h3>
+  <form action="/edit/create" method="POST" onsubmit="return checkCreate(this)">
+    <div>
+      <label>Choreography Title:</label>
+      <input type="text" name="choreoName" title="(Usually the name of the song)" placeholder="Title" autocomplete="off">
+    </div>
+    <div>
+      <label>Choreography Owner:</label>
+      <input type="text" name="owner" title="(Cannot be changed)" value="<%=username %>" readonly>
+    </div>
+    <div>
+      <label>Google Drive Song File ID:</label>
+      <input type="text" name="fileLink" title="Need help? Click below." placeholder="Song file ID" autocomplete="off" oninput="updateAudio(this)"><br>
+      <div id='help'>
+        Don't know how to get the song file ID?<br>
+        <br>
+        Follow these steps:
+        <ol>
+          <li>Upload your file to Google Drive.</li>
+          <li>Right click on the file, select "Share," and click "Advanced."</li>
+          <li>Copy the "Link to share" and paste it in a text-editing software.
+            (The link should have the format "https://drive.google.com/file/d/ ... /view?usp=<br>sharing.")
+          </li>
+          <li>Copy only the string of characters between "file/d/" and "/view" and paste it here.</li>
+          <li>Test your audio below!</li>
+        </ol>
+      </div>
+    </div>
+    Test your audio:&nbsp;<audio id="testAudio" controls  src="">
+    </audio><br>
+    <button type="submit">Create My Choreography!</button>
+  </form>
+  <a href="/edit"><div class="clickable"><div class="vertAlignDiv"><b>Return to Edit Index</b></div></div></a>
+</body>
+
+</html>

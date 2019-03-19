@@ -20,5 +20,22 @@ function checkSignup(form){
     window.alert("Your passwords do not match.");
     return false;
   }
-  return true;
+  var usernameFree = false;
+  $.ajax({
+    url : '/checkUser?username=' + form.username.value,
+    type : 'GET',
+    async: false,
+    success : function(data, status) {
+      if(data.length===0){
+        usernameFree = true;
+      }
+    },
+    error: function() {
+       alert("failed");
+    }
+  });
+  if(!usernameFree){
+    window.alert("This username is already taken.")
+  }
+  return usernameFree;
 }

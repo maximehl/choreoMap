@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>ChoreoMap: View Choreographies</title>
+  <link rel="stylesheet" href="all.css">
+  <link rel="icon" href="https://image.freepik.com/free-icon/musical-notes-symbols_318-29778.jpg">
+  <style>
+    #choreoMenu{
+      width: 400px;
+      height: 600px;
+      background-color: lightgrey;
+      border-radius: 20px;
+      margin: auto;
+      padding: 20px;
+    }
+    .choreoObject{
+      margin: 10px;
+      padding: 10px;
+      cursor: pointer;
+      height: 40px;
+      vertical-align: top;
+      border-radius: 10px;
+      background-color: #EEEEEE;
+      color: black;
+      text-align: left;
+    }
+    .choreoObject:hover{
+      background-color: #E0E0E0;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>— View —</h1>
+  <% if(username){%>
+    <h3>You are logged in as... <span id="username"><%=username%></span></h3>
+  <%} %>
+  <a href="/edit"><div class="clickable"><div class="vertAlignDiv"><b>Edit Choreographies</b></div></div></a>
+  <a href="/"><div class="clickable"><div class="vertAlignDiv"><b>Back to Homepage</b></div></div></a>
+  <% if(username){%>
+    <a href="/logout"><div class="clickable"><div class="vertAlignDiv"><b>Log Out</b></div></div></a>
+  <%} %>
+  <%if(status){%>
+    <br><div class="errorDiv">Error: We couldn't find the choreo "<%=status.substring(4)%>"</div><br>
+  <%}%>
+  <div id="choreoMenu">
+    <%if(data.length>0){%>
+      <h3>Choreographies</h3>
+      <%for(var i=0; i<data.length; i++){%>
+        <a class="plainlink" href="/view/?id=<%=data[i].choreoName%>"><div class="choreoObject"><%=data[i].choreoName%></div></a>
+      <%}%>
+    <%}else{%>
+      <h3>Nothing to see here (yet)</h3>
+    <%}%>
+  </div>
+</body>
+
+</html>

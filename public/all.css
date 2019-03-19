@@ -62,3 +62,33 @@ button{
   background-color: #CCCCCC;
   cursor: pointer;
 }
+button:hover {
+  background-color: #DDDDDD;
+}
+
+.plainlink {
+  color:#0000EE;
+  text-decoration: none;
+}
+.plainlink:visited {
+  color:#0000EE;
+}
+.plainlink:hover {
+  text-decoration: underline;
+}
+.plainlink:active {
+  color:#EE00EE;
+}
+
+
+.errorDiv{
+  background-color: #ff7070;
+  padding: 10px;
+  margin: 5px;
+  display: block;
+  border-radius: 10px;
+}
+
+.noMargin{
+  margin: 0;
+}

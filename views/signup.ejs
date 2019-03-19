@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Sign Up for ChoreoMap</title>
+  <title>ChoreoMap: Sign Up</title>
   <link rel="stylesheet" href="all.css">
+  <link rel="icon" href="https://image.freepik.com/free-icon/musical-notes-symbols_318-29778.jpg">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="all.js"></script>
 </head>
 <body>
   <h1>— Sign Up —</h1>
-  <h3>Thank you for deciding to join! Please enter:</h3>
+  <h3>Thank you for deciding to join!</h3>
+  <a href="/"><div class="clickable"><div class="vertAlignDiv"><b>Back to Homepage</b></div></div></a>
+  <p>Please enter:</p>
   <form action="/signup" method="POST" onsubmit="return checkSignup(this)">
     <div>
       <label>Username:</label>
@@ -24,9 +27,7 @@
     </div>
     <button type="submit">Sign Up</button>
   </form>
-  <br>
-  <a href="/login"><div class="clickable"><div class="vertAlignDiv"><b>Already have an account? Log In</b></div></div></a>
-  <a href="/"><div class="clickable"><div class="vertAlignDiv"><b>Back to Homepage</b></div></div></a>
+  <a href="/login" class="plainlink">Already have an account? Log in</a><br>
 </body>
 
 </html>

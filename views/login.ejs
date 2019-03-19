@@ -1,13 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Login to ChoreoMap</title>
+  <title>ChoreoMap: Login</title>
   <link rel="stylesheet" href="all.css">
+  <link rel="icon" href="https://image.freepik.com/free-icon/musical-notes-symbols_318-29778.jpg">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="all.js"></script>
+  <style>
+  </style>
 </head>
 <body>
   <h1>— Please Log In —</h1>
+  <a href="/"><div class="clickable"><div class="vertAlignDiv"><b>Back to Homepage</b></div></div></a>
+  <%if(status){%>
+    <div class="errorDiv">Error: Incorrect username or password.</div><br>
+  <%}%>
   <form action="/login" method="POST" onsubmit="return checkLogin(this)">
     <div>
       <label>Username:</label>
@@ -19,8 +26,7 @@
     </div>
     <button type="submit">Log In</button>
   </form>
-  <a href="/signup"><div class="clickable"><div class="vertAlignDiv"><b>Don't have<br>an account? Sign up</b></div></div></a>
-  <a href="/"><div class="clickable"><div class="vertAlignDiv"><b>Back to Homepage</b></div></div></a>
+  <a href="/signup" class="plainlink">Don't have an account? Sign up</a>
 </body>
 
 </html>
