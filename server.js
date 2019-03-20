@@ -51,6 +51,6 @@ app.listen(port, () => {
   • undelete the window beforeunload comment
 • on pause of the audio, change the formation timecode form input to the current timecode
   • you'll have to convert from seconds to the --:--.- format
-• add edit and view interfaces
+• make dots able to drag as soon as they're clicked
 
 */

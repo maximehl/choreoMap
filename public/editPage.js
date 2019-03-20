@@ -42,8 +42,6 @@ function startUp(){
 //tagHere: unfinished; add edits for name and group
 //for fancies, on "hover", highlight the performer dot on the screen too
 function renderPerformer(perfName, groupN, perfIndex){
-  //tagHere: make the performer dots
-  //make sure each one has a unique id based on their index in performers array
   var perfDotElement = "<div class='circle perfDot' id='perfDot" + perfIndex + "'>"
     + "<div class='perfLabel'>" + perfName + "</div></div>";
   $(perfDotElement).appendTo("#canvas");
@@ -366,6 +364,35 @@ function deleteFormation(){
   //$(id).remove() the entry on the formations sidebar
 }
 
+function movePerfDots(stepLength){
+  /*for(var i =0; i<performers.length; i++){
+    $("perfDot" + i).css("animation-play-state", "paused");
+  }*/
+  $(".perfDot").css("transition-duration", stepLength);
+  for(var i =0; i<performers.length; i++){
+    $("perfDot" + i).css({"top":performers[selected[i]].positions[currentFormation].yCoord,
+                        "left":performers[selected[i]].positions[currentFormation].xCoord});
+    //okay
+  }
+}
+
+function incrementTime(inc){
+  document.getElementById('testAudio').currentTime=(document.getElementById('testAudio').currentTime+inc);
+  var curTime = document.getElementById('testAudio').currentTime;
+  if(!currentFormation==(formations.length-1)){
+    if(curTime>(formations[currentFormation+1].timeCode-formations[currentFormation+1].moveLength)){
+      currentFormation++;
+      movePerfDots(formations[currentFormation+1].timeCode-curTime);
+    }
+  }
+  if(currentFormation>0){
+    if(curTime<(formations[currentFormation].timeCode-formations[currentFormation].moveLength)){
+      currentFormation--;
+      movePerfDots(0);
+    }
+  }
+  //workingHere
+}
 
 
 $(document).ready(function(){
@@ -373,7 +400,6 @@ $(document).ready(function(){
   $("#canvas").on("click", function(){
     $(this).find(".dotSelected").removeClass("dotSelected").off("mouseup").off("mousemove");
     selected = [];
-    console.log("clearing selected");
   }).on("mousemove", function(){
     //console.log(event.pageX + " " + event.pageY);
     if(dragging>0){

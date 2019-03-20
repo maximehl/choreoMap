@@ -9,6 +9,10 @@
   text-align: left;
 }
 
+#canvasContainer{
+  display: inline-block;
+}
+
 #lEditSidebar{
   width: 200px;
   background-color: lightgrey;
@@ -40,6 +44,11 @@ ul{
 
 button{
   margin: 10px 0 0 0;
+  vertical-align: top;
+}
+
+audio{
+  vertical-align: top;
 }
 
 input{
