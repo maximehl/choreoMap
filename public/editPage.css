@@ -1,6 +1,7 @@
 #canvas {
   display: none;
-  background-color: pink;
+  background-color: white;
+  border: 1px solid black;
   width: 600px;
   height: 450px;
   /*position: absolute;*/
@@ -11,6 +12,11 @@
 
 #canvasContainer{
   display: inline-block;
+}
+
+#loader{
+  display: inline-block;
+  /*width:600px;*/
 }
 
 #lEditSidebar{
@@ -49,6 +55,7 @@ button{
 
 audio{
   vertical-align: top;
+  margin-bottom: 10px;
 }
 
 input{
@@ -64,6 +71,7 @@ h4, h5{
 }
 .listElement:hover{
   filter:brightness(0.8);
+  cursor: pointer;
 }
 
 .listElement>div{
@@ -115,6 +123,8 @@ input[type='number']{
   width: 18px;
   height: 18px;
   border: 2px solid black;
+  transition: linear;
+  transition-property: top, left;
   /*tagHere change the dimensions?*/
 }
 .perfDot:hover{
@@ -139,4 +149,12 @@ input[type='number']{
   margin-right: -100%;
   top: -18px;
   font-size: 9pt;
+}
+
+.listElementHighlight{
+  background-color: #d9aaff;
+}
+
+.timeControlButton{
+  font-size: small;
 }

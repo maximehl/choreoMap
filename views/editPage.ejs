@@ -40,11 +40,6 @@
   <h1>— Edit: <%=choreoName%> —</h1>
   <a class="plainlink" href='/edit/delete/?id=<%=choreoID%>' onclick="return confirm('Are you sure you want to delete this choreography? This action cannot be undone.')">Delete this choreography</a><br>
   <a href="/edit"><div class="clickable"><div class="vertAlignDiv"><b>Back to the Edit Index</b></div></div></a>
-  <div id="loader">
-    <img src="https://i.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.webp">
-    <p>Loading...</p>
-  </div>
-  <br>
 
   <div id="editInterface">
     <div id="lEditSidebar">
@@ -85,11 +80,18 @@
       </div>
     </div>
 
+    
     <div id="canvasContainer">
-      <button onclick="incrementTime(-5)"><< 5</button>
+      <button onclick="incrementTime(-1)" class="timeControlButton">« 1</button>
+      <button onclick="incrementTime(-5)" class="timeControlButton">« 5</button>
       <audio id="testAudio" controls  src=""></audio>
-      <button onclick="incrementTime(5)">5 >></button>
+      <button onclick="incrementTime(5)" class="timeControlButton">5 »</button>
+      <button onclick="incrementTime(1)" class="timeControlButton">1 »</button>
       <br>
+      <div id="loader">
+        <img src="https://i.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.webp">
+        <p>Loading...</p>
+      </div>
       <div id="canvas"></div>
     </div>
 

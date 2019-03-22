@@ -36,10 +36,7 @@ app.listen(port, () => {
 • to add encryption, just encrypt the passwords before sending to database.
   Then, when logging in, encrypt the password the user gives the same way
   and compare to the encrypted password from database
-• figure out how to check if the user is logged in when new session begins
-  • or why the cookie doesn't clear until you access the next page
 • add to Heroku
-• make a fancy canvas-expanding animation when the choreo loads
 • make a fancy "sort by group" option on the edit page performers sidebar
 • make the top bar a navigation bar, rather than ugly buttons
 • use res.send to deal with errors, not url rewriting
@@ -49,8 +46,7 @@ app.listen(port, () => {
 • add method to edit the color of a group
 • check everywhere for "tagHere"
   • undelete the window beforeunload comment
-• on pause of the audio, change the formation timecode form input to the current timecode
-  • you'll have to convert from seconds to the --:--.- format
 • make dots able to drag as soon as they're clicked
-
+• add the instructions: hold shift to select multiple dots on clicks
+• add the multiple-perfDot transformations: scale horizontally, or vertically
 */

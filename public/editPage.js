@@ -11,38 +11,46 @@ var edited = false;
 var currentFormation = 0;
 var selected = [];
 var dragging = 0;
+var shiftKeyPressed = false;
+var songPlaying = false;
+var audioElement;
 
 function startUp(){
-  //tagHere delete the following line, which overrides the groups array
-  performers = [{perfName: "John", groupN: 0, positions:[{xCoord: "341px", yCoord: "50px"}]},
-    {perfName: "Dave", groupN: 1, positions:[{xCoord: "72px", yCoord: "50px"}]},
-    {perfName: "Glorya", groupN: 2, positions:[{xCoord: "374px", yCoord: "50px"}]}];
-  formations = [{formName: "Formation 1", timecode: 0, moveLength: 0}];
-  groups = [{groupName: "Johnathan's stuff", groupColor: "#4682e2"}, {groupName: "Haha yeah", groupColor:"#bf42f4"}, {groupName: "Hell yeah", groupColor:"#34e22b"}];
+  //tagHere comment out the following lines, which override the arrays with testing data
+  performers = [{perfName: "John", groupN: 0, positions:[{xCoord: "253px", yCoord: "44px"}, {xCoord: "258px", yCoord: "73px"}, {xCoord: "256px", yCoord: "101px"}]},
+    {perfName: "Dave", groupN: 1, positions:[{xCoord: "72px", yCoord: "50px"}, {xCoord: "69px", yCoord: "123px"}, {xCoord: "134px", yCoord: "70px"}]},
+    {perfName: "Glorya", groupN: 2, positions:[{xCoord: "374px", yCoord: "50px"}, {xCoord: "371px", yCoord: "123px"}, {xCoord: "319px", yCoord: "71px"}]}];
+  formations = [{formName: "Formation 1", timecode: 0, moveLength: 0}, {formName: "Formation 2", timecode: 6, moveLength: 1}, {formName: "Formation 3", timecode: 7, moveLength: 0.5}];
+  groups = [{groupName: "Jonathan's group", groupColor: "#4682e2"}, {groupName: "Cool group", groupColor:"#bf42f4"}, {groupName: "Awesome group", groupColor:"#34e22b"}];
 
-  $("#loader").hide();
-  $("#canvas").css("display","inline-block");
-  $("#formFormName").val("Formation " + (formations.length+1));
+  audioElement.oncanplay = function(){
+    $("#loader").hide();
+    $("#canvas").css("display","inline-block");
+    $("#formFormName").val("Formation " + (formations.length+1));
 
-  //iterate through the groups array to build the groups list on the left sidebar
-  //also build the groupDropDown options
-  for(var i = 0; i<groups.length; i++){
-    renderGroupElement(groups[i].groupName, groups[i].groupColor, i);
+    //iterate through the groups array to build the groups list on the left sidebar
+    //also build the groupDropDown options
+    for(var i = 0; i<groups.length; i++){
+      renderGroupElement(groups[i].groupName, groups[i].groupColor, i);
+    }
+    //iterate through the formations array to build the formation list on the right sidebar
+    for(var i = 0; i<formations.length; i++){
+      renderFormationElement(formations[i].formName, formations[i].timecode, formations[i].moveLength, i);
+    }
+    //iterate through the performers array to build the circles and performers list in left sidebar
+    for(var i = 0; i<performers.length; i++){
+      renderPerformer(performers[i].perfName, performers[i].groupN, i);
+    }
+    audioElement.oncanplay = "";
   }
-  //iterate through the formations array to build the formation list on the right sidebar
-  for(var i = 0; i<formations.length; i++){
-    renderFormationElement(formations[i].formName, formations[i].timecode, formations[i].moveLength, i);
-  }
-  //iterate through the performers array to build the circles and performers list in left sidebar
-  for(var i = 0; i<performers.length; i++){
-    renderPerformer(performers[i].perfName, performers[i].groupN, i);
-  }
+  
 }
 
 //tagHere: unfinished; add edits for name and group
 //for fancies, on "hover", highlight the performer dot on the screen too
+//when adding edits, make sure to add "stop event propagation" on all newly-added html elements
 function renderPerformer(perfName, groupN, perfIndex){
-  var perfDotElement = "<div class='circle perfDot' id='perfDot" + perfIndex + "'>"
+  var perfDotElement = "<div class='circle perfDot perfDotGroup" + groupN + "' id='perfDot" + perfIndex + "'>"
     + "<div class='perfLabel'>" + perfName + "</div></div>";
   $(perfDotElement).appendTo("#canvas");
 
@@ -57,10 +65,29 @@ function renderPerformer(perfName, groupN, perfIndex){
   });
 
   //while we're at it, let's also generate the li's on the performers sidebar
-  var perfListElement = "<div class='divInsert listElement' id='perfList" + perfIndex + "'>"
+  var perfListElement = "<div class='divInsert listElement perfList perfListGroup" + groupN + "' id='perfList" + perfIndex + "'>"
     + "<div class='colorSample circle' style='background-color: " + groups[groupN].groupColor
     + "'></div>  <b>" + perfName + "</b></div>";
   $(perfListElement).appendTo("#performerList");
+  $("#perfList" + perfIndex).on("click", function(){
+    if($(this).hasClass("listElementHighlight")){
+      $(this).removeClass("listElementHighlight");
+      $("#perfDot" + perfIndex).removeClass("dotSelected").off("mouseup").off("mousemove");
+      selected.splice(selected.indexOf(perfIndex), 1);
+    }else{
+      if(!shiftKeyPressed){
+        $(".dotSelected").removeClass("dotSelected").off("mouseup").off("mousemove");
+        $(".perfList.listElementHighlight, .groupList.listElementHighlight").removeClass("listElementHighlight");
+        selected = [];
+      }
+      $(this).addClass("listElementHighlight");
+      $("#perfDot" + perfIndex).addClass("dotSelected");
+      selected.push(perfIndex);
+    }
+  });
+  $("#perfList" + perfIndex).children().on("click", function(){
+    event.stopPropagation();
+  });
 }
 
 function dotOnmousedown(pageObj){
@@ -70,6 +97,7 @@ function dotOnmousedown(pageObj){
     pageObj.on("mouseup", function(){
       //console.log("unselected");
       pageObj.removeClass("dotSelected");
+      $("#perfList" + myIndex).removeClass("listElementHighlight");
       //console.log(dragging);
       selected.splice(selected.indexOf(myIndex), 1);
       pageObj.off("mouseup").off("mousemove");
@@ -78,8 +106,9 @@ function dotOnmousedown(pageObj){
       //console.log("dragging");
       if(dragging==0){
         //console.log("start drag");
-        //this triggers the check for mousemoves on the window.ready function
-        dragging = myIndex+1;
+        audioElement.pause(); //we don't want the song playing (and possibly triggering transitions) when dragging elements
+        $(".perfDot").css("transition-duration", "0s"); //so they don't glide around when you drag them
+        dragging = myIndex+1; //this triggers the check for mousemoves on the window.ready function
         pageObj.off("mouseup");
         pageObj.on("mouseup", function(){
           //console.log("finish drag");
@@ -95,14 +124,23 @@ function dotOnmousedown(pageObj){
     });
   }else{
     //console.log("clicked and now selected");
+    if(!shiftKeyPressed){
+      $(".dotSelected").removeClass("dotSelected").off("mouseup").off("mousemove");
+      $(".perfList.listElementHighlight, .groupList.listElementHighlight").removeClass("listElementHighlight");
+      selected = [];
+    }
     pageObj.addClass("dotSelected");
+    $("#perfList" + myIndex).addClass("listElementHighlight");
     selected.push(myIndex);
   }
 }
 
 //tagHere: unfinished; add editing for color chip
+//tagHere: change editing entirely: have the input elements pre-loaded, but hidden,
+//alongside the actual text elements, that way you can just swap the stuff back and forth
+//no deleting required
 function renderGroupElement(groupName, groupColor, groupIndex){
-  var groupElement = "<div class='divInsert listElement' id='groupList" + groupIndex + "'>" +
+  var groupElement = "<div class='divInsert listElement groupList' id='groupList" + groupIndex + "'>" +
     "<div class='colorSample' style='background-color: " + groupColor
     + "'></div>  <div class='editHover'><b>" + groupName + "</b></div></div>";
   $(groupElement).appendTo("#groupList");
@@ -113,11 +151,43 @@ function renderGroupElement(groupName, groupColor, groupIndex){
   //tagHere change the .on() if the one below is changed
   //tagHere doesn't work with johnathan's stuff: breaks on the apostrophe
   $("#groupList" + groupIndex).find("b").on("click", function(){
+    event.stopPropagation();
     var inputVal = $(this).html();
     $("<input class='noMargin' type='text' placeholder='Name'>").appendTo($(this).parent().parent());
     $(this).parent().parent().find(':text').val(inputVal);
     $("<a class='plainlink' onclick='saveListName($(this), 1, parseInt($(this).parent().parent().find(&quot;a&quot;).parent().attr(&quot;id&quot;).substring(9)))'>Save&nbsp;name</a>").appendTo($(this).parent().parent());
     $(this).remove();
+  });
+  $("#groupList" + groupIndex).on("click", function(){
+    /*if(!shiftKeyPressed){
+      $(".dotSelected").removeClass("dotSelected").off("mouseup").off("mousemove");
+      $(".perfList.listElementHighlight, .groupList.listElementHighlight").removeClass("listElementHighlight");
+      selected = [];
+    }*/
+    if($(this).hasClass("listElementHighlight")){
+      $(this).removeClass("listElementHighlight");
+      $(".perfDotGroup" + groupIndex).each(function(){
+        $(this).removeClass("dotSelected").off("mouseup").off("mousemove");
+        selected.splice(selected.indexOf(parseInt($(this).attr("id").substring(7))), 1);
+      });
+      $(".perfListGroup" + groupIndex).each(function(){
+        $(this).removeClass("listElementHighlight");
+      });
+    }else{
+      if(!shiftKeyPressed){
+        $(".dotSelected").removeClass("dotSelected").off("mouseup").off("mousemove");
+        $(".perfList.listElementHighlight, .groupList.listElementHighlight").removeClass("listElementHighlight");
+        selected = [];
+      }
+      $(this).addClass("listElementHighlight");
+      $(".perfDotGroup" + groupIndex).each(function(){
+        $(this).addClass("dotSelected");
+        selected.push(parseInt($(this).attr("id").substring(7)));
+      });
+      $(".perfListGroup" + groupIndex).each(function(){
+        $(this).addClass("listElementHighlight");
+      });
+    }
   });
 
   //tagHere: attach .on("click", function(){}) to the color swatch, the <b> name,
@@ -127,7 +197,7 @@ function renderGroupElement(groupName, groupColor, groupIndex){
 
 //tagHere: unfinished; add editing for name, timecode, moveLength
 function renderFormationElement(formName, timecode, moveLength, formationIndex){
-  var formationElement = "<div class='divInsert listElement' id='formList" + formationIndex + "'>"
+  var formationElement = "<div class='divInsert listElement formList' id='formList" + formationIndex + "'>"
     + "<div class='editHover'><b>" + formName + "</b><br><span>" + secToTimecode(timecode)
     + "</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>" + moveLength + " sec</span></div></div>";
   if(formationIndex==0){
@@ -136,6 +206,19 @@ function renderFormationElement(formName, timecode, moveLength, formationIndex){
     $(formationElement).insertAfter("#formList" + (formationIndex-1));
   }
 
+  $("#formList" + formationIndex).on("click", function(){
+    $(".listElementHighlight").removeClass("listElementHighlight");
+    $(this).addClass("listElementHighlight");
+    currentFormation = formationIndex; //parseInt($(this).attr("id").substring(8));
+    audioElement.currentTime = formations[currentFormation].timecode;
+    movePerfDots(0.1);
+  });
+
+  $(".listElementHighlight").removeClass("listElementHighlight");
+  $("#formList" + formationIndex).addClass("listElementHighlight");
+  currentFormation = formationIndex;
+  audioElement.currentTime = formations[currentFormation].timecode;
+  movePerfDots(0.1);
   /*
   //tagHere change the .on() if the one below is changed
   //tagHere doesn't work with johnathan's stuff: breaks on the apostrophe
@@ -284,20 +367,20 @@ function makeNewFormation(){
       }
     }
 
-    //tagHere checking the things
-
-    renderFormationElement(formName, timecode, moveLength, arrayPlace);
+    //tagHere checking the things -- I don't know if this is necessary anymore
 
     formations.splice(arrayPlace, 0, {formName: formName, timecode: timecode, moveLength: moveLength});
     //copy a new position into each performer's positions array
     for(var perf of performers){
-      perf.positions.splice(arrayPlace, 0, perf.positions[arrayPlace-1]);
+      perf.positions.splice(arrayPlace, 0, {"xCoord":perf.positions[arrayPlace-1].xCoord, "yCoord":perf.positions[arrayPlace-1].yCoord});
     }
     //increment the ids of all the formation dom objects on the page
     while(arrayPlace<formations.length-1){
       $("#formList" + arrayPlace).attr("id", "formList" + arrayPlace+1);
       arrayPlace++;
     }
+
+    renderFormationElement(formName, timecode, moveLength, arrayPlace);
 
     //clear form inputs
     $("#formFormName").val("Formation " + (formations.length+1));
@@ -357,7 +440,7 @@ function deleteGroup(){
 }
 
 function deleteFormation(){
-  //iterate through performers array, somehow delete that position object in each of their positions[] arrays
+  //iterate through performers array, delete that position object in each of their positions[] arrays
   //tagHere
   edited = true;
 
@@ -368,37 +451,95 @@ function movePerfDots(stepLength){
   /*for(var i =0; i<performers.length; i++){
     $("perfDot" + i).css("animation-play-state", "paused");
   }*/
-  $(".perfDot").css("transition-duration", stepLength);
+  $(".perfDot").css("transition-duration", (stepLength + "s"));
   for(var i =0; i<performers.length; i++){
-    $("perfDot" + i).css({"top":performers[selected[i]].positions[currentFormation].yCoord,
-                        "left":performers[selected[i]].positions[currentFormation].xCoord});
-    //okay
+    $("#perfDot" + i).css({"top":performers[i].positions[currentFormation].yCoord,
+                        "left":performers[i].positions[currentFormation].xCoord});
+    //okay (this comment is here so that the tabs on line above don't make it hard to make new lines)
   }
 }
 
 function incrementTime(inc){
-  document.getElementById('testAudio').currentTime=(document.getElementById('testAudio').currentTime+inc);
-  var curTime = document.getElementById('testAudio').currentTime;
-  if(!currentFormation==(formations.length-1)){
-    if(curTime>(formations[currentFormation+1].timeCode-formations[currentFormation+1].moveLength)){
-      currentFormation++;
-      movePerfDots(formations[currentFormation+1].timeCode-curTime);
+  audioElement.currentTime=(audioElement.currentTime+inc);
+  var curTime = audioElement.currentTime;
+  if(currentFormation!=(formations.length-1)){
+    if(curTime>(formations[currentFormation+1].timecode-formations[currentFormation+1].moveLength)){
+      $("#formList" + currentFormation).removeClass("listElementHighlight");
+      while(currentFormation<formations.length-1){
+        if(curTime>formations[currentFormation+1].timecode-formations[currentFormation+1].moveLength){
+          currentFormation++;
+        }else{
+          break;
+        }
+      }
+      $("#formList" + currentFormation).addClass("listElementHighlight");
+      movePerfDots(0.1);//formations[currentFormation].timecode-curTime);
     }
   }
   if(currentFormation>0){
-    if(curTime<(formations[currentFormation].timeCode-formations[currentFormation].moveLength)){
-      currentFormation--;
-      movePerfDots(0);
+    if(curTime<(formations[currentFormation].timecode-formations[currentFormation].moveLength)){
+      $("#formList" + currentFormation).removeClass("listElementHighlight");
+      while(currentFormation>0){
+        if(curTime<formations[currentFormation].timecode-formations[currentFormation].moveLength){
+          currentFormation--;
+        }else{
+          break;
+        }
+      }
+      $("#formList" + currentFormation).addClass("listElementHighlight");
+      movePerfDots(0.1);
     }
   }
-  //workingHere
+  //tagHere: unfinished?
 }
 
+function searchForCurFormation(){
+  var curTime = audioElement.currentTime;
+    $("#formList" + currentFormation).removeClass("listElementHighlight");
+    for(var i = formations.length-1; i>0; i--){
+      if(formations[i].timecode<=curTime){
+        break;
+      }
+    }
+    currentFormation = i;
+    $("#formList" + currentFormation).addClass("listElementHighlight");
+    movePerfDots(0.1);
+}
+
+function giveTimeFormatted(){
+  var curTime = audioElement.currentTime;
+    if(Math.round((curTime%60)*10)/10<10){
+      $("#formTimecode").val(Math.floor(curTime/60) + ":0" + Math.round((curTime%60)*10)/10);
+    }else{
+      $("#formTimecode").val(Math.floor(curTime/60) + ":" + Math.round((curTime%60)*10)/10);
+    }
+}
 
 $(document).ready(function(){
   $(".errorDiv").css("display","none");
+  audioElement = document.getElementById('testAudio');
+
+  audioElement.onplay = function(){
+    songPlaying = true;
+    searchForCurFormation();
+    checkDotMoves();
+  }
+  audioElement.onpause = function(){
+    songPlaying = false;
+    giveTimeFormatted();
+  }
+  //below commented out because it switches between seeking and seeked super fast
+  /*audioElement.onseeking = function(){
+    songPlaying = false;
+  }*/
+  audioElement.onseeked = function(){
+    searchForCurFormation();
+    giveTimeFormatted();
+  }
+
   $("#canvas").on("click", function(){
-    $(this).find(".dotSelected").removeClass("dotSelected").off("mouseup").off("mousemove");
+    $(".dotSelected").removeClass("dotSelected").off("mouseup").off("mousemove");
+    $(".perfList.listElementHighlight, .groupList.listElementHighlight").removeClass("listElementHighlight");
     selected = [];
   }).on("mousemove", function(){
     //console.log(event.pageX + " " + event.pageY);
@@ -417,6 +558,17 @@ $(document).ready(function(){
       //$("#perfDot" + elementIndex).css({"left": moveX, "top": moveY});
     }
   });
+
+  $(this).keydown(function(){
+    if(event.keyCode == 16){
+      shiftKeyPressed = true;
+    }
+  });
+  $(this).keyup(function(){
+    if(event.keyCode == 16){
+      shiftKeyPressed = false;
+    }
+  })
   //tagHere delete comment
   //autoSave() //this starts the autoSave() self-calls every two minutes
 
@@ -428,8 +580,38 @@ $(document).ready(function(){
   */
 });
 
-function draggedElements(){
-
+function checkDotMoves(){
+  //console.log("checking!")
+  var curTime = audioElement.currentTime;
+  if(currentFormation!=(formations.length-1)){
+    if(curTime>(formations[currentFormation+1].timecode-formations[currentFormation+1].moveLength)){
+      $("#formList" + currentFormation).removeClass("listElementHighlight");
+      while(currentFormation<formations.length-1){
+        if(curTime>formations[currentFormation+1].timecode-formations[currentFormation+1].moveLength){
+          currentFormation++;
+        }else{
+          break;
+        }
+      }
+      $("#formList" + currentFormation).addClass("listElementHighlight");
+      movePerfDots(formations[currentFormation].timecode-curTime);
+      /*console.log("move, wait...");
+      setTimeout(function(){
+        if(songPlaying){
+          console.log("checking again");
+          checkDotMoves();
+        }else{
+          return;
+        }
+      }, (formations[currentFormation].timecode-curTime)*1000);
+      return;*/
+    }
+  }
+  if(songPlaying){
+    setTimeout(function(){
+      checkDotMoves(); //ooh, recursion!
+    }, 100); //that's 0.1 seconds tagHere change this?
+  }
 }
 
 function autoSave(){
