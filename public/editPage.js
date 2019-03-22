@@ -1,9 +1,4 @@
-//onload, do an asynchronous check to load the choreo
-//have a spinning gif until the choreo loads
 var performers = [];
-/*array of performers: each has
-
-*/
 var groups = [];
 var formations = [];
 var fileLink = "";
@@ -43,7 +38,7 @@ function startUp(){
     }
     audioElement.oncanplay = "";
   }
-  
+
 }
 
 //tagHere: unfinished; add edits for name and group
@@ -141,23 +136,35 @@ function dotOnmousedown(pageObj){
 //no deleting required
 function renderGroupElement(groupName, groupColor, groupIndex){
   var groupElement = "<div class='divInsert listElement groupList' id='groupList" + groupIndex + "'>" +
-    "<div class='colorSample' style='background-color: " + groupColor
-    + "'></div>  <div class='editHover'><b>" + groupName + "</b></div></div>";
+    "<div class='editHover'><div class='colorSample' style='background-color: " + groupColor
+    + "'></div></div><div class='editElements'><input type='color' value='#4682e2'></div></div>  <div class='inlineDiv'><div class='editHover'><b>" + groupName
+    + "</b></div><div class='editElements'><input class='noMargin' type='text' placeholder='Name' hidden>"
+    + "<a class='plainlink' onclick='saveListName($(this), 1)'><br>Save&nbsp;name</a></div></div></div>";
   $(groupElement).appendTo("#groupList");
+  $("#groupList" + groupIndex).find(".editHover").on("mouseenter", function(){
+    $(this).css({"border": "0.5px solid lightgrey", "background-color": "white", "padding": "3px"})
+  }).on("mouseleave", function(){
+    $(this).css({"border": 0, "background-color": "transparent", "padding": 0})
+  })
 
   var groupOption = "<option value='" + $("#groupDropDown option").length + "'>" + groupName + "</option>";
   $(groupOption).appendTo("#groupDropDown");
 
   //tagHere change the .on() if the one below is changed
   //tagHere doesn't work with johnathan's stuff: breaks on the apostrophe
-  $("#groupList" + groupIndex).find("b").on("click", function(){
+  $("#groupList" + groupIndex).find(".editHover").on("click", function(){
     event.stopPropagation();
-    var inputVal = $(this).html();
+    $(this).hide();
+    $(this).parent().find("input[type=text]").val($(this).html());
+    $(this).parent().find(".editElements").show();
+    $(this).parent().find("a").show();
+    /*var inputVal = $(this).html();
     $("<input class='noMargin' type='text' placeholder='Name'>").appendTo($(this).parent().parent());
     $(this).parent().parent().find(':text').val(inputVal);
     $("<a class='plainlink' onclick='saveListName($(this), 1, parseInt($(this).parent().parent().find(&quot;a&quot;).parent().attr(&quot;id&quot;).substring(9)))'>Save&nbsp;name</a>").appendTo($(this).parent().parent());
-    $(this).remove();
+    $(this).remove();*/
   });
+
   $("#groupList" + groupIndex).on("click", function(){
     /*if(!shiftKeyPressed){
       $(".dotSelected").removeClass("dotSelected").off("mouseup").off("mousemove");
@@ -232,7 +239,8 @@ function renderFormationElement(formName, timecode, moveLength, formationIndex){
 }
 
 function saveListName(listObject, objectType, objectIndex){
-  console.log(objectIndex);
+  console.log(listObject);
+  /*console.log(objectIndex);
   var newValue = listObject.parent().find(":text").val();
 
   if(objectType==1){
@@ -253,7 +261,8 @@ function saveListName(listObject, objectType, objectIndex){
     $(this).remove();
   });
   listObject.parent().find(":text").remove();
-  listObject.remove();
+  listObject.remove();*/
+
 }
 
 function makeNewPerformer(){
@@ -405,7 +414,7 @@ function makeNewFormation(){
 
 function editPerformer(){
   //tagHere
-  //make sure to update the li with the new group color and the new class name,
+  //make sure to update the perfList and the perfDot with the new group color and the new class name,
   //and delete the old class name
   edited = true;
 }

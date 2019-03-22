@@ -74,15 +74,15 @@ h4, h5{
   cursor: pointer;
 }
 
-.listElement>div{
+/*.listElement>div{
   filter:none;
-}
+}*/
 
 .colorSample{
-  width: 1em;
-  height: 1em;
+  width: 16px;
+  height: 16px;
   border: 2px solid black;
-  display: inline-block;
+  /*display: inline-block;*/
   vertical-align: bottom;
 }
 
@@ -94,19 +94,31 @@ h4, h5{
   border-radius: 50%;
 }
 
+.inlineDiv{
+  display: inline-block;
+}
+.editElements{
+  display: none;
+}
+
 .listElement > .editHover{
   border: 0;
   padding: 0;
   display: inline-block;
-  vertical-align: bottom;
-  cursor: text;
+  vertical-align: middle;
+  cursor: pointer;
 }
 
-.listElement > .editHover :hover{
+/*.listElement > .editHover :hover{
   border: 0.5px solid lightgrey;
   background-color: white;
   padding: 3px;
 }
+.listElement > .editHover > .colorSample:hover{
+  border: 2px solid black;
+  padding: 0;
+  cursor: pointer;
+}*/
 
 select{
   width: 120px;

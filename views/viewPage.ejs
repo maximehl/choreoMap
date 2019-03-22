@@ -1,25 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>ChoreoMap: Create New Choreo</title>
+  <title>ChoreoMap: View <%=choreoName%></title>
   <link rel="stylesheet" href="../all.css">
+  <link rel="stylesheet" href="../editPage.css">
   <link rel="icon" href="https://image.freepik.com/free-icon/musical-notes-symbols_318-29778.jpg">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="../all.js"></script>
+  <script src="../editPage.js"></script>
   <style>
   </style>
   <script>
-    //onload, do an asynchronous check to load the choreo
-    //have a spinning gif until the choreo loads
+    $(document).ready(function(){
+      $.get("/choreoData?id=<%=choreoID%>", function(data){
+        performers = data[0].performers;
+        groups = data[0].groups;
+        formations = data[0].formations;
+        fileLink = data[0].fileLink;
+        $("#testAudio").prop("src", "http://docs.google.com/uc?export=open&id=" + fileLink);
+
+        startUp();
+      });
+    });
   </script>
 </head>
 <body>
-  <h1>— View: <%=choreoName%> —</h1>
-  <div>
-    Cool viewing interface!
+  <h1>— Edit: <%=choreoName%> —</h1>
+  <a class="plainlink" href='/edit/delete/?id=<%=choreoID%>' onclick="return confirm('Are you sure you want to delete this choreography? This action cannot be undone.')">Delete this choreography</a><br>
+  <a href="/edit"><div class="clickable"><div class="vertAlignDiv"><b>Back to the Edit Index</b></div></div></a>
+
+  <div id="editInterface">
+    <div id="lEditSidebar">
+      <h4>Performers</h4>
+      <div id="performerList">
+      </div>
+
+      <h4>Groups</h4>
+      <div id="groupList">
+      </div>
+
+    <div id="canvasContainer">
+      <button onclick="incrementTime(-1)" class="timeControlButton">« 1</button>
+      <button onclick="incrementTime(-5)" class="timeControlButton">« 5</button>
+      <audio id="testAudio" controls  src=""></audio>
+      <button onclick="incrementTime(5)" class="timeControlButton">5 »</button>
+      <button onclick="incrementTime(1)" class="timeControlButton">1 »</button>
+      <br>
+      <div id="loader">
+        <img src="https://i.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.webp">
+        <p>Loading...</p>
+      </div>
+      <div id="canvas"></div>
+    </div>
+
+    <div id="rEditSidebar">
+
+      <h4>Formations</h4>
+      <div id="formList">
+      </div>
+    </div>
   </div>
 
-  <a href="/view"><div class="clickable"><div class="vertAlignDiv"><b>Back to the View Index</b></div></div></a>
 </body>
 
 </html>
