@@ -25,9 +25,10 @@ function startUp(){
   for(var i = 0; i<performers.length; i++){
     renderPerformer(performers[i].perfName, performers[i].groupN, i);
   }
-  
   currentFormation = 0;
-  movePerfDots(0.1);
+  $(".formList.listElementHighlight").removeClass("listElementHighlight");
+  $("#formList0").addClass("listElementHighlight");
+  audioElement.currentTime = 0.1;
 }
 
 function renderPerformer(perfName, groupN, perfIndex){
