@@ -24,9 +24,9 @@ app.use(session({
 
 require("./app/routes.js")(app)
 
-var port = env.process.PORT || 3000 //tagHere for Heroku, comment out the env.process.PORT if not on Heroku
+var port = env.process.PORT || 80 //tagHere for Heroku, comment out the env.process.PORT, use 3000, if not on Heroku
 app.listen(port, () => {
-  console.log('listening on 3000')
+  //console.log('listening on 3000')
 })
 
 
