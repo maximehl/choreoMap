@@ -17,29 +17,33 @@
         formations = data[0].formations;
         fileLink = data[0].fileLink;
         $("#testAudio").prop("src", "http://docs.google.com/uc?export=open&id=" + fileLink);
-
-        startUp();
+        audioElement.oncanplay = function(){
+          startUp();
+          audioElement.oncanplay = "";
+        }
       });
     });
-
     function saveChoreo(){
-      var dataObj = {};
-      dataObj.choreoName = "<%=choreoID%>";
-      dataObj.fileLink = fileLink;
-      dataObj.performers = performers;
-      dataObj.groups = groups;
-      dataObj.formations = formations;
-
-      $.post("/edit?id=<%=choreoID%>", dataObj, function(data){
-        console.log("yaaaaah")
-      })
+      if(edited){
+        var dataObj = {};
+        dataObj.choreoName = "<%=choreoID%>";
+        dataObj.fileLink = fileLink;
+        dataObj.performers = performers;
+        dataObj.groups = groups;
+        dataObj.formations = formations;
+        //console.log(dataObj);
+        $.post("/edit?id=<%=choreoID%>", dataObj);
+        edited = false;
+        $("#saveButton").html("Saved");
+      }
     }
   </script>
 </head>
 <body>
   <h1>— Edit: <%=choreoName%> —</h1>
   <a class="plainlink" href='/edit/delete/?id=<%=choreoID%>' onclick="return confirm('Are you sure you want to delete this choreography? This action cannot be undone.')">Delete this choreography</a><br>
-  <a href="/edit"><div class="clickable"><div class="vertAlignDiv"><b>Back to the Edit Index</b></div></div></a>
+  <a href="/edit"><div class="clickable"><div class="vertAlignDiv"><b>Back to the edit index</b></div></div></a>
+  <a href="/view?id=<%=choreoID%>"><div class="clickable"><div class="vertAlignDiv"><b>View this choreo</b></div></div></a>
 
   <div id="editInterface">
     <div id="lEditSidebar">
@@ -73,7 +77,7 @@
         </div>
         <div>
           <label>Group color:</label>
-          <input type="color" value="#4682e2" id="groupColor">
+          <input type="color" value="#4682e2" id="groupColor" class="noMargin">
         </div>
         <div id="groupErr" class="errorDiv"></div>
         <button onclick="makeNewGroup()">New group</button>
@@ -88,15 +92,47 @@
       <button onclick="incrementTime(5)" class="timeControlButton">5 »</button>
       <button onclick="incrementTime(1)" class="timeControlButton">1 »</button>
       <br>
+      Go to timecode: <input type="text" id="specTimeJump" placeholder="- - : - - . - (min : sec)" oninput="$('#specTimeJumpErr').hide()"> 
+      <button class="smallButton" onclick="specTimeJump()">Go</button>
+      <br><div class="errorDiv" id="specTimeJumpErr"></div>
+      <br>
+      <div id="fileLinkDiv">
+        <div class='inlineDiv'>
+          Song file ID:
+        </div> 
+        <div class='inlineDiv'>
+          <div class='editHover'>
+            <span id="fileLinkSpan"></span>
+          </div>
+          <div class='editElements'>
+            <input class='noMargin' type='text' placeholder='Song file ID'>
+            <a class='plainlink' onclick='editListObj($(this), 6, 0)'><br>Save&nbsp;file&nbsp;ID</a>
+          </div>
+        </div>
+      </div>
+      <br><br>
       <div id="loader">
         <img src="https://i.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.webp">
         <p>Loading...</p>
       </div>
-      <div id="canvas"></div>
+      <div id="canvas"></div><br>
+      <button onclick="if(edited){saveChoreo()}" id="saveButton">Saved</button>
+      <div id="instructions">
+        <h4>Instructions</h4>
+        <p>
+          Should be pretty self-explanatory!<br>
+          Create new groups, performers, and formations using the sidebars to the left and right.<br>
+          Click on the text/color samples in the groups/performers/formations to edit them.<br>
+          Move performers within formations by clicking them and then dragging and dropping them where you want them to be. (Make sure you have the formation you want to edit selected on the right!)<br>
+          You can also select performers individually or by group by clicking on the element in the left sidebar.<br>
+          You can select additional performers by holding [Shift] while clicking on the new performer.<br>
+          Deselect performers by clicking on them. Deselect all by clicking on the canvas.<br>
+          You can play through the choreography over the song.<br>
+        </p>
+      </div>
     </div>
 
     <div id="rEditSidebar">
-
       <h4>Formations</h4>
       <div id="formList">
       </div>
@@ -117,6 +153,21 @@
         </div>
         <div id="formationErr" class="errorDiv"></div>
         <button onclick="makeNewFormation()">New formation</button>
+      </div>
+
+      <h4>Transformations</h4>
+      <div class="divInsert">
+        <button onclick="selectAll()" class="smallButton">Select all</button>
+      </div>
+      <div class="divInsert">
+        Scale selected performers horizontally to <input type="number" id="horizScale" step="10" min="0" placeholder="100">% their current width
+        <br>
+        <button onclick="selectedScale(1, $('#horizScale').val())" class="smallButton">Go</button>
+      </div>
+      <div class="divInsert">
+        Scale selected performers vertically to <input type="number" id="vertScale" step="10" min="0" placeholder="100">% their current height
+        <br>
+        <button onclick="selectedScale(2, $('#vertScale').val())" class="smallButton">Go</button>
       </div>
     </div>
   </div>

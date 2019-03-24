@@ -11,7 +11,7 @@ mongoose.connect('mongodb://president:15hotpitches@ds139322.mlab.com:39322/chore
 app.use(bodyParser.urlencoded({ extended: true }))
 app.set('view engine','ejs')
 app.use(express.static("public"))
-app.use(express.static('public/page-icon.png'))
+app.use(express.static('/favicon.ico'))
 app.use(cookieParser())
 
 app.use(session({
@@ -24,7 +24,7 @@ app.use(session({
 
 require("./app/routes.js")(app)
 
-var port = /*env.process.PORT ||*/ 3000 //tagHere for Heroku
+var port = env.process.PORT || 3000 //tagHere for Heroku, comment out the env.process.PORT if not on Heroku
 app.listen(port, () => {
   console.log('listening on 3000')
 })
@@ -37,16 +37,10 @@ app.listen(port, () => {
   Then, when logging in, encrypt the password the user gives the same way
   and compare to the encrypted password from database
 • add to Heroku
-• make a fancy "sort by group" option on the edit page performers sidebar
-• make the top bar a navigation bar, rather than ugly buttons
 • use res.send to deal with errors, not url rewriting
 • test the website on mobile with device toolbar: command + shift + M
-• check thrown errors on login, signup pages, so that changing errorDiv css from
-  inline-block to block doesn't make stuff ugly
-• add method to edit the color of a group
 • check everywhere for "tagHere"
-  • undelete the window beforeunload comment
 • make dots able to drag as soon as they're clicked
-• add the instructions: hold shift to select multiple dots on clicks
-• add the multiple-perfDot transformations: scale horizontally, or vertically
+• update the instructions
+• empty response error?
 */

@@ -39,3 +39,37 @@ function checkSignup(form){
   }
   return usernameFree;
 }
+
+function searchChoreo(){
+  var searchTerm = $("#searchTerm").val();
+  if(searchTerm){
+    if(window.location.pathname=='/view'){
+      $.get("/search?term=" + searchTerm, function(data){
+        renderElements(data);
+      });
+    }else{
+      $.get("/search?term=" + searchTerm + "&edit=1", function(data){
+        renderElements(data);
+      });
+    }
+    
+  }else{
+    $.get("/search", function(data){
+      renderElements(data);
+    });
+  }
+}
+
+function renderElements(data){
+  $("#choreoList").empty();
+  if(data.length>0){
+    $("#choreoList").append($("<h3>Your search returned these results:</h3>"));
+    for(var i = 0; i<data.length; i++){
+      var listObj = '<a class="plainlink" href="' + window.location.pathname + '/?id=' + data[i].choreoName 
+        + '"><div class="choreoObject divInsert">' + data[i].choreoName + '</div></a>';
+      $(listObj).appendTo("#choreoList");
+    }
+  }else{
+    $("#choreoList").append($("<h3>Your search returned no results!</h3>"));
+  }
+}

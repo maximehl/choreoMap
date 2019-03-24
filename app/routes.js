@@ -42,7 +42,7 @@ module.exports = function(app){
       ChoreoInfo.findOne({choreoName: req.query.id}, function(err, choreo){
         if(err) throw err
         if(choreo){
-          res.render('viewPage.ejs', {choreoName:req.query.id})
+          res.render('viewPage.ejs', {choreoID:req.query.id})
         }else{
           res.redirect('/view?status=miss' + req.query.id)
           //res.render('missingChoreo.ejs', {choreoName:req.query.id})
@@ -56,6 +56,28 @@ module.exports = function(app){
       })
     }
 
+  })
+
+  app.get('/search', function(req,res){
+    console.log('searching for "' + req.query.term + "'")
+    if(req.query.term){
+      if(req.query.edit){
+        ChoreoInfo.find( {$text: {$search: req.query.term}, owner: req.cookies.username}, function(err,choreo){
+          if(err) throw err
+          res.send(choreo)
+        })
+      }else{
+        ChoreoInfo.find( {$text: {$search: req.query.term}}, function(err,choreo){
+          if(err) throw err
+          res.send(choreo)
+        })
+      }
+    }else{
+      ChoreoInfo.find({}, function(err,choreo){
+        if(err) throw err
+        res.send(choreo)
+      })
+    }
   })
 
   app.get('/edit', function(req,res){
@@ -184,16 +206,19 @@ module.exports = function(app){
   })
 
   app.post('/edit', function(req,res){
-    console.log("testing fun things")
+    console.log("saving")
     ChoreoData.findOneAndUpdate({choreoName:req.body.choreoName},
       {
-        performers: req.query.performers,
-        groups: req.query.groups,
-        formations: req.query.formations,
+        fileLink: req.body.fileLink,
+        performers: req.body.performers||[],
+        groups: req.body.groups||[],
+        formations: req.body.formations,
       },
       function(err, choreoData){
         if(err) throw err
+        res.end();
         //tagHere
+        //console.log(choreoData);
     })
   })
 }

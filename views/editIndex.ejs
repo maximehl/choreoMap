@@ -4,6 +4,8 @@
   <title>ChoreoMap: Edit Choreographies</title>
   <link rel="stylesheet" href="all.css">
   <link rel="icon" href="https://image.freepik.com/free-icon/musical-notes-symbols_318-29778.jpg">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="../all.js"></script>
   <style>
     #choreoMenu{
       width: 400px;
@@ -28,12 +30,9 @@
     }*/
     .choreoObject{
       margin: 10px;
-      padding: 10px;
       cursor: pointer;
       height: 40px;
       vertical-align: top;
-      border-radius: 10px;
-      background-color: #EEEEEE;
       color: black;
       text-align: left;
     }
@@ -41,13 +40,24 @@
       background-color: #E0E0E0;
       text-decoration: underline;
     }
+
+    .divInsert{
+      padding: 10px;
+      border-radius: 10px;
+      background-color: #EEEEEE;
+    }
+    #searchButton{
+      margin: 0;
+      padding: 5px;
+    }
   </style>
 </head>
 <body>
   <h1>— Edit —</h1>
   <h3>You are logged in as... <span id="username"><%=username%></span></h3>
-  <a href="/view"><div class="clickable"><div class="vertAlignDiv"><b>View Choreographies</b></div></div></a><a href="/"><div class="clickable"><div class="vertAlignDiv"><b>Back to Homepage</b></div></div></a>
-  <a href="/logout"><div class="clickable"><div class="vertAlignDiv"><b>Log Out</b></div></div></a>
+  <a href="/view"><div class="clickable"><div class="vertAlignDiv"><b>View choreographies</b></div></div></a>
+  <a href="/"><div class="clickable"><div class="vertAlignDiv"><b>Back to homepage</b></div></div></a>
+  <a href="/logout"><div class="clickable"><div class="vertAlignDiv"><b>Log out</b></div></div></a>
   <%if(status){%>
     <br><div class="errorDiv">
       Error: <%if(status=='permission'){%>You do not have permission to edit this choreography.
@@ -57,14 +67,20 @@
     </div><br>
   <%}%>
   <div id="choreoMenu">
-    <%if(data.length>0){%>
-      <h3>Your choreographies</h3>
-      <%for(var i=0; i<data.length; i++){%>
-        <a class="plainlink" href="/edit/?id=<%=data[i].choreoName%>"><div class="choreoObject"><%=data[i].choreoName%></div></a>
+    <div class="divInsert">
+      Search: <input type="text" id="searchTerm" placeholder="Choreo name">&nbsp;
+      <button onclick="searchChoreo()" id="searchButton">Go</button>
+    </div>
+    <div id="choreoList">
+      <%if(data.length>0){%>
+        <h3>Your choreographies</h3>
+        <%for(var i=0; i<data.length; i++){%>
+          <a class="plainlink" href="/edit/?id=<%=data[i].choreoName%>"><div class="choreoObject divInsert"><%=data[i].choreoName%></div></a>
+        <%}%>
+      <%}else{%>
+        <h3>Nothing to see here (yet)</h3>
       <%}%>
-    <%}else{%>
-      <h3>Nothing to see here (yet)</h3>
-    <%}%>
+    </div>
     <a class="plainlink" href="/edit/create">Create a new choreography!</a>
   </div>
 </body>

@@ -81,15 +81,15 @@
   <h3>Please name your choreography.</h3>
   <form action="/edit/create" method="POST" onsubmit="return checkCreate(this)">
     <div>
-      <label>Choreography Title:</label>
+      <label>Choreography title:</label>
       <input type="text" name="choreoName" title="(Usually the name of the song)" placeholder="Title" autocomplete="off">
     </div>
     <div>
-      <label>Choreography Owner:</label>
+      <label>Choreography owner:</label>
       <input type="text" name="owner" title="(Cannot be changed)" value="<%=username %>" readonly>
     </div>
     <div>
-      <label>Google Drive Song File ID:</label>
+      <label>Google Drive song file ID:</label>
       <input type="text" name="fileLink" title="Need help? Click below." placeholder="Song file ID" autocomplete="off" oninput="updateAudio(this)"><br>
       <div id='help'>
         Don't know how to get the song file ID?<br>
@@ -108,9 +108,9 @@
     </div>
     Test your audio:&nbsp;<audio id="testAudio" controls  src="">
     </audio><br>
-    <button type="submit">Create My Choreography!</button>
+    <button type="submit">Create my choreography!</button>
   </form>
-  <a href="/edit"><div class="clickable"><div class="vertAlignDiv"><b>Return to Edit Index</b></div></div></a>
+  <a href="/edit"><div class="clickable"><div class="vertAlignDiv"><b>Return to edit index</b></div></div></a>
 </body>
 
 </html>

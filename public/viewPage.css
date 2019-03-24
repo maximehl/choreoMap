@@ -2,7 +2,6 @@ body{
   min-width: 1071px;
 }
 
-
 /*general usage styling*/
 .listElement{
   text-align: left;
@@ -29,34 +28,11 @@ body{
 
 
 /*edit element styling*/
-.editElements{
-  display: none;
-}
-.editHover{
-  border: 0;
-  padding: 0;
-  display: inline-block;
-  cursor: pointer;
-}
-.editElements > a{
-  font-size: small;
-}
-.editElements{
-  vertical-align: text-top;
-}
 input{
   margin: 5px 0;
 }
-select{
-  width: 120px;
-}
 input[type='number']{
   width: 40px;
-}
-input[type='color']{
-  width: 16px;
-  height: 20px;
-  border: 1px;
 }
 
 
@@ -85,6 +61,7 @@ input[type='color']{
 .dotSelected:active{
   cursor:grabbing;
 }
+
 .perfLabel{
   position: relative;
   text-align: center;
@@ -114,13 +91,6 @@ button{
   margin: 0;
   padding: 5px;
   font-size: small;
-}
-.delButton{
-  float: right;
-  vertical-align: top;
-}
-.delButton:hover{
-  font-weight: bold;
 }
 audio{
   vertical-align: top;
@@ -189,23 +159,10 @@ h4, h5{
   max-height: 400px;
   overflow-y: scroll;
 }
-#fileLinkDiv{
-  background-color: lightgrey;
-  border-radius: 15px;
-  font-size: 11pt;
-  padding: 10px;
-  display: inline-block;
-}
-#fileLinkDiv input[type="text"]{
-  width: 250px;
-}
-#groupErr{
-  display: none;
-}
 #specTimeJumpErr{
   font-size: small;
+  display: none;
 }
-
 
 .listElementHighlight{
   background-color: #d9aaff;

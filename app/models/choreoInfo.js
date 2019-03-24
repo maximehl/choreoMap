@@ -1,7 +1,7 @@
 var mongoose = require("mongoose")
 
 var infoSchema = mongoose.Schema({
-  choreoName: String,
+  choreoName: {type: String, text: true},
   owner: String,
   fileLink: String
 })

@@ -11,8 +11,9 @@
 </head>
 <body>
   <h1>— Please Log In —</h1>
-  <a href="/"><div class="clickable"><div class="vertAlignDiv"><b>Back to Homepage</b></div></div></a>
+  <a href="/"><div class="clickable"><div class="vertAlignDiv"><b>Back to homepage</b></div></div></a>
   <%if(status){%>
+    <br>
     <div class="errorDiv">Error: Incorrect username or password.</div><br>
   <%}%>
   <form action="/login" method="POST" onsubmit="return checkLogin(this)">
@@ -24,7 +25,7 @@
       <label>Password:</label>
       <input type="password" name="password" placeholder="Password">
     </div>
-    <button type="submit">Log In</button>
+    <button type="submit">Log in</button>
   </form>
   <a href="/signup" class="plainlink">Don't have an account? Sign up</a>
 </body>
