@@ -985,3 +985,9 @@ function selectAll(){
     selected.push(i);
   }
 }
+
+function tryUpdate(time){
+  if(checkTimecode(time)>0){
+    audioElement.currentTime = checkTimecode(time);
+  }
+}
