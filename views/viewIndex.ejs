@@ -7,39 +7,6 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="../all.js"></script>
   <style>
-    #choreoMenu{
-      width: 400px;
-      height: 600px;
-      background-color: lightgrey;
-      border-radius: 20px;
-      margin: auto;
-      padding: 20px;
-    }
-    .choreoObject{
-      margin: 10px;
-      padding: 10px;
-      cursor: pointer;
-      height: 40px;
-      vertical-align: top;
-      border-radius: 10px;
-      background-color: #EEEEEE;
-      color: black;
-      text-align: left;
-    }
-    .choreoObject:hover{
-      background-color: #E0E0E0;
-      text-decoration: underline;
-    }
-
-    .divInsert{
-      padding: 10px;
-      border-radius: 10px;
-      background-color: #EEEEEE;
-    }
-    #searchButton{
-      margin: 0;
-      padding: 5px;
-    }
   </style>
 </head>
 <body>
@@ -64,7 +31,14 @@
       <%if(data.length>0){%>
         <h3>Choreographies</h3>
         <%for(var i=0; i<data.length; i++){%>
-          <a class="plainlink" href="/view/?id=<%=data[i].choreoName%>"><div class="choreoObject"><%=data[i].choreoName%></div></a>
+          <div class='listEntry'>
+            <div class='inlineDiv'>
+              <a href="/edit?id=<%=data[i].choreoName%>"><div class="choreoObject divInsert"><%=data[i].choreoName%></div></a>
+            </div>
+            <div class='inlineDiv duplicateLink'>
+              <a class="plainlink" href="/duplicate?id=<%=data[i].choreoName%>">Duplicate</a>
+            </div>
+          </div>
         <%}%>
       <%}else{%>
         <h3>Nothing to see here (yet)</h3>

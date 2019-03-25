@@ -61,17 +61,10 @@ module.exports = function(app){
   app.get('/search', function(req,res){
     console.log('searching for "' + req.query.term + "'")
     if(req.query.term){
-      if(req.query.edit){
-        ChoreoInfo.find( {$text: {$search: req.query.term}, owner: req.cookies.username}, function(err,choreo){
-          if(err) throw err
-          res.send(choreo)
-        })
-      }else{
-        ChoreoInfo.find( {$text: {$search: req.query.term}}, function(err,choreo){
-          if(err) throw err
-          res.send(choreo)
-        })
-      }
+      ChoreoInfo.find( {$text: {$search: req.query.term}}, function(err,choreo){
+        if(err) throw err
+        res.send(choreo)
+      })
     }else{
       ChoreoInfo.find({}, function(err,choreo){
         if(err) throw err
@@ -126,7 +119,33 @@ module.exports = function(app){
   app.get('/edit/create', function(req,res){
     if(req.session.user && req.cookies.uSessionID){
       console.log('get choreo create new')
-      res.render('createChoreo.ejs', {username: req.cookies.username})
+      res.render('createChoreo.ejs', 
+        {
+          username: req.cookies.username,
+          pageTitle:"Create a New Choreography",
+          pageAction:"/edit/create",
+          fileLink:"",
+          dupID:""
+        })
+    }else{
+      res.redirect('/login')
+    }
+  })
+
+  app.get('/duplicate', function(req,res){
+    if(req.session.user && req.cookies.uSessionID){
+      console.log('get choreo duplicate')
+      ChoreoInfo.findOne({choreoName:req.query.id}, function(err, choreo){
+        if(err) throw err
+        res.render('createChoreo.ejs', 
+          {
+            username: req.cookies.username,
+            pageTitle:"Duplicate " + req.query.id,
+            pageAction:"/duplicate",
+            fileLink: choreo.fileLink,
+            dupID: req.query.id
+          })
+      })
     }else{
       res.redirect('/login')
     }
@@ -203,6 +222,27 @@ module.exports = function(app){
     newChoreoData.formations[0] = {formName: "Formation 1", timecode: 0, moveLength: 0}
     newChoreoData.save()
     res.redirect('/edit?id=' + req.body.choreoName)
+  })
+
+  app.post('/duplicate', function(req,res){
+    console.log('duplicating ' + req.body.dupID)
+    var newChoreoInfo = new ChoreoInfo()
+    newChoreoInfo.choreoName = req.body.choreoName
+    newChoreoInfo.owner = req.body.owner
+    newChoreoInfo.fileLink = req.body.fileLink
+    newChoreoInfo.save()
+
+    var newChoreoData = new ChoreoData()
+    newChoreoData.choreoName = req.body.choreoName
+    newChoreoData.fileLink = req.body.fileLink
+    ChoreoData.findOne({choreoName:req.body.dupID}, function(err, choreo){
+      if(err) throw err
+      newChoreoData.formations = choreo.formations
+      newChoreoData.performers = choreo.performers
+      newChoreoData.groups = choreo.groups
+      newChoreoData.save()
+      res.redirect('/edit?id=' + req.body.choreoName)
+    })
   })
 
   app.post('/edit', function(req,res){

@@ -66,6 +66,14 @@ button:hover {
   background-color: #DDDDDD;
 }
 
+a{
+  color: black;
+  text-decoration: none;
+}
+a:visited{
+  color: black;
+}
+
 .plainlink {
   color:#0000EE;
   text-decoration: none;
@@ -91,4 +99,50 @@ button:hover {
 
 .noMargin{
   margin: 0;
+}
+
+#choreoMenu{
+  width: 400px;
+  height: 600px;
+  background-color: lightgrey;
+  border-radius: 20px;
+  margin: auto;
+  padding: 20px;
+}
+.choreoObject{
+  margin: 5px;
+  padding: 10px;
+  cursor: pointer;
+  height: 40px;
+  vertical-align: text-top;
+  align-self: left;
+  border-radius: 10px;
+  background-color: #EEEEEE;
+  color: black;
+  text-align: left;
+  display: inline-block;
+  width: 300px;
+}
+.choreoObject:hover{
+  background-color: #E0E0E0;
+  text-decoration: underline;
+}
+
+.divInsert{
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #EEEEEE;
+}
+#searchButton{
+  margin: 0;
+  padding: 5px;
+}
+
+.duplicateLink{
+  font-size: small;
+}
+
+.inlineDiv{
+  display: inline-block;
+  vertical-align: middle;
 }

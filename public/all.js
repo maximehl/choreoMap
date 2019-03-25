@@ -43,16 +43,9 @@ function checkSignup(form){
 function searchChoreo(){
   var searchTerm = $("#searchTerm").val();
   if(searchTerm){
-    if(window.location.pathname=='/view'){
-      $.get("/search?term=" + searchTerm, function(data){
-        renderElements(data);
-      });
-    }else{
-      $.get("/search?term=" + searchTerm + "&edit=1", function(data){
-        renderElements(data);
-      });
-    }
-    
+    $.get("/search?term=" + searchTerm, function(data){
+      renderElements(data);
+    });
   }else{
     $.get("/search", function(data){
       renderElements(data);
@@ -65,8 +58,9 @@ function renderElements(data){
   if(data.length>0){
     $("#choreoList").append($("<h3>Your search returned these results:</h3>"));
     for(var i = 0; i<data.length; i++){
-      var listObj = '<a class="plainlink" href="' + window.location.pathname + '/?id=' + data[i].choreoName 
-        + '"><div class="choreoObject divInsert">' + data[i].choreoName + '</div></a>';
+      var listObj = '<div><div class="inlineDiv"><a href="' + window.location.pathname + '?id=' + data[i].choreoName 
+        + '"><div class="choreoObject divInsert">' + data[i].choreoName + '</div></a></div>'
+        + '<div class="inlineDiv duplicateLink"><a class="plainlink" href="/duplicate?id=' + data[i].choreoName + '">Duplicate</a></div></div>';
       $(listObj).appendTo("#choreoList");
     }
   }else{

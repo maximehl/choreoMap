@@ -31,8 +31,11 @@ function startUp(){
   for(var i = 0; i<performers.length; i++){
     renderPerformer(performers[i].perfName, performers[i].groupN, i);
   }
-  
-  autoSave() //this starts the autoSave() self-calls
+  currentFormation = 0;
+  $(".formList.listElementHighlight").removeClass("listElementHighlight");
+  $("#formList0").addClass("listElementHighlight");
+  audioElement.currentTime = 0.1;
+  autoSave() //this starts the autoSave() recursive calls
 }
 
 function renderPerformer(perfName, groupN, perfIndex){
@@ -128,6 +131,7 @@ function renderGroupElement(groupName, groupColor, groupIndex){
 
   var groupOption = "<option value='" + $("#groupDropDown option").length + "'>" + groupName + "</option>";
   $(groupOption).appendTo("#groupDropDown");
+  $(groupOption).appendTo(".perfList select");
 
   
   $("#groupList" + groupIndex).find(".editHover").on("mouseenter", function(){
@@ -690,9 +694,11 @@ function deleteGroup(groupIndex){
   console.log(groupIndex);
   $("#groupList" + groupIndex).remove();
   $("#groupDropDown option[value=" + groupIndex + "]").remove();
+  $(".perfList").find("select option[value=" + groupIndex + "]").remove();
   for(var i = groupIndex+1; i<groups.length; i++){
     $("#groupList" + i).attr("id", "groupList" + (i-1));
     $("#groupDropDown option[value=" + i + "]").attr("value", (i-1));
+    $(".perfList").find("select option[value=" + i + "]").attr("value", (i-1));
   }
   for(var i = 0; i<performers.length; i++){
     if(performers[i].groupN>groupIndex){
@@ -702,6 +708,7 @@ function deleteGroup(groupIndex){
   for(var i = groupIndex+1; i<groups.length; i++){
     $(".perfDotsGroup" + i).removeClass("perfDotsGroup" + i).addClass("perfDotsGroup" + (i-1));
     $(".perfListGroup" + i).removeClass("perfListGroup" + i).addClass("perfListGroup" + (i-1));
+    $(".colorSampleGroup" + i).removeClass("colorSampleGroup" + i).addClass("colorSampleGroup" + (i-1));
   }
 
   groups.splice(groupIndex, 1);
@@ -879,7 +886,7 @@ $(document).ready(function(){
     var moveY;
     for(var i =0; i<performers.length; i++){
       moveX = $("#perfDots" + i).position().left - $("#canvas").position().left - 1;// - parseInt(performers[dragging].positions[currentFormation].xCoord);
-      moveY = $("#perfDots" + i).position().top - $("#canvas").position().top - (22*i) - 2;
+      moveY = $("#perfDots" + i).position().top - $("#canvas").position().top - (22*i) - 1;
       $("#perfDots" + i).css({"top":moveY, "left":moveX, "transition-duration":"0s"});
     }
     $("#formTimecode").val(secToTimecode(audioElement.currentTime));

@@ -139,6 +139,9 @@ h4, h5{
 ::-webkit-scrollbar-thumb:hover {
   background-color: #8e8e8e; 
 }
+ul{
+  text-align: left;
+}
 
 
 /*very specific element styling*/

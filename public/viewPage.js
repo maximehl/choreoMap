@@ -440,7 +440,7 @@ $(document).ready(function(){
     var moveY;
     for(var i =0; i<performers.length; i++){
       moveX = $("#perfDots" + i).position().left - $("#canvas").position().left - 1;// - parseInt(performers[dragging].positions[currentFormation].xCoord);
-      moveY = $("#perfDots" + i).position().top - $("#canvas").position().top - (22*i) - 2;
+      moveY = $("#perfDots" + i).position().top - $("#canvas").position().top - (22*i) - 1;
       $("#perfDots" + i).css({"top":moveY, "left":moveX, "transition-duration":"0s"});
     }
     $("#formTimecode").val(secToTimecode(audioElement.currentTime));
