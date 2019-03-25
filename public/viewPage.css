@@ -157,7 +157,7 @@ ul{
   float: right;
   font-size: 11pt;
 }
-#performerList, #groupList, #formationList{
+#performerList, #groupList, #formList{
   max-height: 400px;
   overflow-y: scroll;
 }
