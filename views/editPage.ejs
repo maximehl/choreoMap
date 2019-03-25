@@ -149,7 +149,7 @@
         </div>
         <div>
           <label>Timecode:</label>
-          <input type="text" id="formTimecode" placeholder="- - : - - . - (min : sec)">
+          <input type="text" id="formTimecode" placeholder="- - : - - . - (min : sec)" onchange="tryUpdate($(this).val())">
         </div>
         <div>
           <label>Move length:</label>
