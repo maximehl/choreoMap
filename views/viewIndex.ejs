@@ -33,7 +33,7 @@
         <%for(var i=0; i<data.length; i++){%>
           <div class='listEntry'>
             <div class='inlineDiv'>
-              <a href="/edit?id=<%=data[i].choreoName%>"><div class="choreoObject divInsert"><%=data[i].choreoName%></div></a>
+              <a href="/view?id=<%=data[i].choreoName%>"><div class="choreoObject divInsert"><%=data[i].choreoName%></div></a>
             </div>
             <div class='inlineDiv duplicateLink'>
               <a class="plainlink" href="/duplicate?id=<%=data[i].choreoName%>">Duplicate</a>
