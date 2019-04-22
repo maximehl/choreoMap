@@ -8,7 +8,7 @@ var session = require('express-session')
 mongoose.connect('mongodb://president:15hotpitches@ds139322.mlab.com:39322/choreomap', {useNewUrlParser: true})
 
 // configure app to use bodyParser() and ejs
-app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.json({limit: '50mb', extended: true}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
 app.set('view engine','ejs')
