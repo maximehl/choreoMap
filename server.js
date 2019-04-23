@@ -9,7 +9,7 @@ mongoose.connect('mongodb://president:15hotpitches@ds139322.mlab.com:39322/chore
 
 // configure app to use bodyParser() and ejs
 app.use(bodyParser.json({limit: '50mb', extended: true}));
-app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true, parameterLimit: 5000000}));
 
 app.set('view engine','ejs')
 app.use(express.static("public"))
