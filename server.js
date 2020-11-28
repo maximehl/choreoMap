@@ -5,7 +5,7 @@ var app        = express()     // define our app using express
 var mongoose = require('mongoose')
 var cookieParser = require('cookie-parser')
 var session = require('express-session')
-mongoose.connect('mongodb://president:15hotpitches@ds139322.mlab.com:39322/choreomap', {useNewUrlParser: true})
+mongoose.connect('mongodb+srv://president:15hotpitches@choreomap.ws04j.mongodb.net/choreomap?retryWrites=true&w=majority', {useNewUrlParser: true})
 
 // configure app to use bodyParser() and ejs
 app.use(bodyParser.json({limit: '50mb', extended: true}));
